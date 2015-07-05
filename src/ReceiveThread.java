@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -35,6 +36,26 @@ public class ReceiveThread extends Thread{
 
     @Override
     public void run() {
-        super.run();
+        try {
+            while (true){
+                String message = bufferedReaderIn.readLine();
+                while ( message != null ){
+                    System.out.println( message );
+                    message = bufferedReaderIn.readLine();
+                }
+                if ( bufferedReaderIn.readLine().equals("end") ){
+                    break;
+                }
+                bufferedReaderIn.close();
+                printWriterOut.close();
+                userIn.close();
+                if ( socket != null ){
+                    socket.close();
+                }
+                serverSocket.close();
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }
